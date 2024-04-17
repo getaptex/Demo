@@ -1,0 +1,53 @@
+﻿<Window x:Class="Demo_Chizhonok.admin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Demo_Chizhonok"
+        mc:Ignorable="d"
+        Title="менеджер" Height="450" Width="800" Loaded="Window_Loaded">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <Button x:Name="reload" Content="Перезагрузить Программу"  Height="40" Margin="10" Click="reload_Click" Width="160"/>
+            <Label Width="500"/>
+            <Button x:Name="Add" Margin="10" Click="Add_Click" Content="Add"/>
+        </DockPanel>
+        <TabControl  >
+            <TabItem Header="Главная">
+                <Label Content="Добро пожаловать, менеджер!" HorizontalAlignment="Center" FontSize="54" VerticalAlignment="Center" />
+            </TabItem>
+            <TabItem Header="Заказы">
+                <DataGrid  x:Name="ADE" AutoGenerateColumns="False" IsEnabled="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Номер заказа" Binding="{Binding order_ID}"/>
+                        <DataGridTextColumn Header="дата" Binding="{Binding date}"/>
+                        <DataGridTextColumn Header="Оборудование" Binding="{Binding equpment_to_repair}"/>
+                        <DataGridTextColumn Header="проблема" Binding="{Binding problem}"/>
+                        <DataGridTextColumn Header="клиент" Binding="{Binding client}"/>
+                        <DataGridComboBoxColumn x:Name="ads" Header="status" TextBinding="{Binding status}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Работники">
+                <DataGrid x:Name="WorkersADE" AutoGenerateColumns="False" IsEnabled="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Номер рабочего" Binding="{Binding worker_id}"/>
+                        <DataGridTextColumn Header="имя" Binding="{Binding name}"/>
+                        <DataGridTextColumn Header="фамилия" Binding="{Binding surname}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Склад">
+                <DataGrid x:Name="StorageADE" AutoGenerateColumns="False" IsEnabled="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Номер товара" Binding="{Binding article_id}"/>
+                        <DataGridTextColumn Header="товар" Binding="{Binding article}"/>
+                        <DataGridTextColumn Header="дата" Binding="{Binding date}"/>
+                        <DataGridTextColumn Header="номер склада" Binding="{Binding storage_id}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+
+</Window>

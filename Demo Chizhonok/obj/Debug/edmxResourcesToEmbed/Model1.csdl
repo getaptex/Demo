@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="demoChizhonokModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="orders">
+    <Key>
+      <PropertyRef Name="order_ID" />
+    </Key>
+    <Property Name="order_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="equpment_to_repair" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="problem" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="client" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="worker_id" Type="Int32" />
+    <Property Name="sparepart_id" Type="Int32" />
+    <NavigationProperty Name="storage" Relationship="Self.FK_orders_storage" FromRole="orders" ToRole="storage" />
+    <NavigationProperty Name="workers" Relationship="Self.FK_orders_workers" FromRole="orders" ToRole="workers" />
+  </EntityType>
+  <EntityType Name="storage">
+    <Key>
+      <PropertyRef Name="article_id" />
+    </Key>
+    <Property Name="article_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="article" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="storage_id" Type="Int32" />
+    <Property Name="date" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="orders" Relationship="Self.FK_orders_storage" FromRole="storage" ToRole="orders" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="login" />
+    </Key>
+    <Property Name="login" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="workers">
+    <Key>
+      <PropertyRef Name="worker_id" />
+    </Key>
+    <Property Name="worker_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="surname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="orders" Relationship="Self.FK_orders_workers" FromRole="workers" ToRole="orders" />
+  </EntityType>
+  <Association Name="FK_orders_storage">
+    <End Role="storage" Type="Self.storage" Multiplicity="0..1" />
+    <End Role="orders" Type="Self.orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="storage">
+        <PropertyRef Name="article_id" />
+      </Principal>
+      <Dependent Role="orders">
+        <PropertyRef Name="sparepart_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_orders_workers">
+    <End Role="workers" Type="Self.workers" Multiplicity="0..1" />
+    <End Role="orders" Type="Self.orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="workers">
+        <PropertyRef Name="worker_id" />
+      </Principal>
+      <Dependent Role="orders">
+        <PropertyRef Name="worker_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="demoChizhonokEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="orders" EntityType="Self.orders" />
+    <EntitySet Name="storage" EntityType="Self.storage" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="users" EntityType="Self.users" />
+    <EntitySet Name="workers" EntityType="Self.workers" />
+    <AssociationSet Name="FK_orders_storage" Association="Self.FK_orders_storage">
+      <End Role="storage" EntitySet="storage" />
+      <End Role="orders" EntitySet="orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_orders_workers" Association="Self.FK_orders_workers">
+      <End Role="workers" EntitySet="workers" />
+      <End Role="orders" EntitySet="orders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

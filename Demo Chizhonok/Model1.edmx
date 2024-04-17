@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище demoChizhonokModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="order_ID" />
+          </Key>
+          <Property Name="order_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="equpment_to_repair" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="problem" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="client" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="status" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="worker_id" Type="int" />
+          <Property Name="sparepart_id" Type="int" />
+        </EntityType>
+        <EntityType Name="storage">
+          <Key>
+            <PropertyRef Name="article_id" />
+          </Key>
+          <Property Name="article_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="article" Type="nchar" MaxLength="10" />
+          <Property Name="storage_id" Type="int" />
+          <Property Name="date" Type="date" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="login" />
+          </Key>
+          <Property Name="login" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="password" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="workers">
+          <Key>
+            <PropertyRef Name="worker_id" />
+          </Key>
+          <Property Name="worker_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nchar" MaxLength="10" />
+          <Property Name="surname" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_orders_storage">
+          <End Role="storage" Type="Self.storage" Multiplicity="0..1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="storage">
+              <PropertyRef Name="article_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="sparepart_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orders_workers">
+          <End Role="workers" Type="Self.workers" Multiplicity="0..1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="workers">
+              <PropertyRef Name="worker_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="worker_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище demoChizhonokModelContainer">
+          <EntitySet Name="orders" EntityType="Self.orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="storage" EntityType="Self.storage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="workers" EntityType="Self.workers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_orders_storage" Association="Self.FK_orders_storage">
+            <End Role="storage" EntitySet="storage" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orders_workers" Association="Self.FK_orders_workers">
+            <End Role="workers" EntitySet="workers" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="demoChizhonokModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="order_ID" />
+          </Key>
+          <Property Name="order_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="equpment_to_repair" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="problem" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="client" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="worker_id" Type="Int32" />
+          <Property Name="sparepart_id" Type="Int32" />
+          <NavigationProperty Name="storage" Relationship="Self.FK_orders_storage" FromRole="orders" ToRole="storage" />
+          <NavigationProperty Name="workers" Relationship="Self.FK_orders_workers" FromRole="orders" ToRole="workers" />
+        </EntityType>
+        <EntityType Name="storage">
+          <Key>
+            <PropertyRef Name="article_id" />
+          </Key>
+          <Property Name="article_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="article" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="storage_id" Type="Int32" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="orders" Relationship="Self.FK_orders_storage" FromRole="storage" ToRole="orders" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="login" />
+          </Key>
+          <Property Name="login" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="workers">
+          <Key>
+            <PropertyRef Name="worker_id" />
+          </Key>
+          <Property Name="worker_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="surname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="orders" Relationship="Self.FK_orders_workers" FromRole="workers" ToRole="orders" />
+        </EntityType>
+        <Association Name="FK_orders_storage">
+          <End Role="storage" Type="Self.storage" Multiplicity="0..1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="storage">
+              <PropertyRef Name="article_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="sparepart_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orders_workers">
+          <End Role="workers" Type="Self.workers" Multiplicity="0..1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="workers">
+              <PropertyRef Name="worker_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="worker_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="demoChizhonokEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="orders" EntityType="Self.orders" />
+          <EntitySet Name="storage" EntityType="Self.storage" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="users" EntityType="Self.users" />
+          <EntitySet Name="workers" EntityType="Self.workers" />
+          <AssociationSet Name="FK_orders_storage" Association="Self.FK_orders_storage">
+            <End Role="storage" EntitySet="storage" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orders_workers" Association="Self.FK_orders_workers">
+            <End Role="workers" EntitySet="workers" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище demoChizhonokModelContainer" CdmEntityContainer="demoChizhonokEntities">
+          <EntitySetMapping Name="orders">
+            <EntityTypeMapping TypeName="demoChizhonokModel.orders">
+              <MappingFragment StoreEntitySet="orders">
+                <ScalarProperty Name="order_ID" ColumnName="order_ID" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="equpment_to_repair" ColumnName="equpment_to_repair" />
+                <ScalarProperty Name="problem" ColumnName="problem" />
+                <ScalarProperty Name="client" ColumnName="client" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="worker_id" ColumnName="worker_id" />
+                <ScalarProperty Name="sparepart_id" ColumnName="sparepart_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="storage">
+            <EntityTypeMapping TypeName="demoChizhonokModel.storage">
+              <MappingFragment StoreEntitySet="storage">
+                <ScalarProperty Name="article_id" ColumnName="article_id" />
+                <ScalarProperty Name="article" ColumnName="article" />
+                <ScalarProperty Name="storage_id" ColumnName="storage_id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="demoChizhonokModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="demoChizhonokModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="workers">
+            <EntityTypeMapping TypeName="demoChizhonokModel.workers">
+              <MappingFragment StoreEntitySet="workers">
+                <ScalarProperty Name="worker_id" ColumnName="worker_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
